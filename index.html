@@ -93,7 +93,7 @@ video {
 
 <div class="wrap">
   <video id="vid" muted loop playsinline
-    poster="https://ddecamerica.github.io/the-future-of-mobility/storymap-assets/assets/images/fallback.jpg">
+    poster="https://ddecamerica.github.io/the-future-of-mobility/storymap-assets/assets/images/sections/pbc-stat-drive-alone-77pct-03-mini.png">
     <source src="https://ddecamerica.github.io/the-future-of-mobility/storymap-assets/assets/videos/the-future-of-mobility.mp4" type="video/mp4">
   </video>
 
@@ -139,13 +139,6 @@ video {
   }
 
   vid.addEventListener('canplay', () => vid.classList.add('ready'));
-  vid.addEventListener('loadeddata', () => {
-    const canvas = document.createElement('canvas');
-    canvas.width = vid.videoWidth;
-    canvas.height = vid.videoHeight;
-    canvas.getContext('2d').drawImage(vid, 0, 0);
-    vid.poster = canvas.toDataURL('image/jpeg', 0.8);
-  });
   vid.addEventListener('loadedmetadata', () => {
     timeEl.textContent = '0:00 / ' + fmt(vid.duration);
   });
