@@ -89,15 +89,6 @@ video {
   }
 </style>
 </head>
-
- <!-- Add just before </body> -->
-<script>
-  document.addEventListener('DOMContentLoaded', () => {
-    document.documentElement.dispatchEvent(new PointerEvent('pointerdown', { bubbles: true, cancelable: true }));
-    document.documentElement.dispatchEvent(new PointerEvent('pointerup', { bubbles: true, cancelable: true }));
-  });
-</script>
- 
 <body>
 
 <div class="wrap">
@@ -148,6 +139,13 @@ video {
   }
 
   vid.addEventListener('canplay', () => vid.classList.add('ready'));
+  vid.addEventListener('loadeddata', () => {
+    const canvas = document.createElement('canvas');
+    canvas.width = vid.videoWidth;
+    canvas.height = vid.videoHeight;
+    canvas.getContext('2d').drawImage(vid, 0, 0);
+    vid.poster = canvas.toDataURL('image/jpeg', 0.8);
+  });
   vid.addEventListener('loadedmetadata', () => {
     timeEl.textContent = '0:00 / ' + fmt(vid.duration);
   });
