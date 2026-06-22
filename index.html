@@ -17,11 +17,13 @@
         display: flex;
         justify-content: center;
         align-items: center;
+        background: black;
     }
 
     video {
         width: 100%;
         max-height: 100vh;
+        background: black;
     }
 </style>
 </head>
@@ -30,7 +32,14 @@
 
 <div class="container">
 
-    <video controls>
+    <video 
+        autoplay 
+        muted 
+        loop 
+        playsinline 
+        controls 
+        poster="https://ddecamerica.github.io/the-future-of-mobility/storymap-assets/assets/images/fallback.jpg">
+
         <source src="https://ddecamerica.github.io/the-future-of-mobility/storymap-assets/assets/videos/the-future-of-mobility.mp4" type="video/mp4">
         Your browser does not support video.
     </video>
