@@ -22,13 +22,14 @@
     background: #000;
   }
 
-  video {
+video {
     position: absolute;
     inset: 0;
     width: 100%; height: 100%;
     object-fit: cover;
     opacity: 0;
     transition: opacity 1.2s ease;
+    cursor: pointer;
   }
   video.ready { opacity: 1; }
 
@@ -102,10 +103,6 @@
   </div>
 
   <div class="overlay-bottom">
-    <!-- Add above the progress-track div -->
-    <div id="hint" style="font-size:11px; color:rgba(255,255,255,.45); text-align:center; font-family:system-ui,sans-serif; padding-bottom:2px; pointer-events:none;">
-    Click to activate · double-click video to pause
-    </div>
     <div class="progress-track" id="track">
       <div class="progress-fill" id="fill"></div>
     </div>
@@ -127,7 +124,6 @@
   </div>
 </div>
 
-<!-- Replace the existing <script> block with this -->
 <script>
   const vid = document.getElementById('vid');
   const fill = document.getElementById('fill');
@@ -136,7 +132,6 @@
   const playBtn = document.getElementById('playBtn');
   const muteBtn = document.getElementById('muteBtn');
   const fsBtn = document.getElementById('fsBtn');
-  const wrap = document.querySelector('.wrap');
 
   function fmt(s) {
     const m = Math.floor(s / 60), sec = Math.floor(s % 60);
@@ -161,10 +156,9 @@
     document.getElementById('iconPause').style.display = 'none';
   });
 
-  // FIX: double-click on video to toggle pause (bypasses StoryMap interaction lock)
-  vid.addEventListener('dblclick', () => vid.paused ? vid.play() : vid.pause());
-
   playBtn.addEventListener('click', () => vid.paused ? vid.play() : vid.pause());
+
+  vid.addEventListener('click', () => vid.paused ? vid.play() : vid.pause());
 
   muteBtn.addEventListener('click', () => {
     vid.muted = !vid.muted;
@@ -177,17 +171,17 @@
     vid.currentTime = ((e.clientX - r.left) / r.width) * vid.duration;
   });
 
-  // FIX: fullscreen on the whole document so Esc works natively,
-  // and re-activate interaction after fullscreen exits
-  fsBtn.addEventListener('click', () => {
-    if (!document.fullscreenElement) {
-      document.documentElement.requestFullscreen().catch(() => {});
+fsBtn.addEventListener('click', () => {
+    if (!document.fullscreenElement && !document.webkitFullscreenElement) {
+      const el = document.documentElement;
+      if (el.requestFullscreen) el.requestFullscreen();
+      else if (el.webkitRequestFullscreen) el.webkitRequestFullscreen();
     } else {
-      document.exitFullscreen().catch(() => {});
+      if (document.exitFullscreen) document.exitFullscreen();
+      else if (document.webkitExitFullscreen) document.webkitExitFullscreen();
     }
   });
 
-  // FIX: update fullscreen icon and re-focus iframe after exit
   document.addEventListener('fullscreenchange', () => {
     const inFS = !!document.fullscreenElement;
     fsBtn.querySelector('svg').innerHTML = inFS
@@ -195,17 +189,10 @@
       : '<path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z"/>';
   });
 
-    // Add inside the <script>, after the other event listeners
-    document.addEventListener('click', () => {
-    const hint = document.getElementById('hint');
-    if (hint) hint.style.display = 'none';
-    }, { once: true });
-
-  // Intersection Observer — auto play/pause on scroll
   const obs = new IntersectionObserver(entries => {
-    entries.forEach(e => e.isIntersecting ? vid.play().catch(() => {}) : vid.pause());
+    entries.forEach(e => e.isIntersecting ? vid.play().catch(()=>{}) : vid.pause());
   }, { threshold: 0.4 });
-  obs.observe(wrap);
+  obs.observe(document.querySelector('.wrap'));
 </script>
 </body>
 </html>
