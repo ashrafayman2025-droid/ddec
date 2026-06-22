@@ -9,24 +9,19 @@
     body {
         margin: 0;
         background: black;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        min-height: 100vh;
     }
 
     .container {
         width: 100%;
-        max-width: 1200px;
-        padding: 20px;
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
     }
 
     video {
         width: 100%;
-        height: auto;
-        border-radius: 12px;
-        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6);
-        outline: none;
+        max-height: 100vh;
     }
 </style>
 </head>
@@ -35,9 +30,9 @@
 
 <div class="container">
 
-    <video controls preload="metadata" playsinline>
+    <video controls>
         <source src="https://ddecamerica.github.io/the-future-of-mobility/storymap-assets/assets/videos/the-future-of-mobility.mp4" type="video/mp4">
-        Your browser does not support the video tag.
+        Your browser does not support video.
     </video>
 
 </div>
